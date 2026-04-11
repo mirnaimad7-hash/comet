@@ -8,7 +8,8 @@ class OnboardingController extends GetxController {
   void updatePage(int index) {
     currentPage.value = index;
   }
+
   void goToLogin() {
-    Get.toNamed('/login'); 
+    Get.toNamed('/login');
   }
 }

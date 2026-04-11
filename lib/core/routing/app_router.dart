@@ -2,7 +2,7 @@
 
 import 'package:get/get.dart';
 import 'package:comet/features/onboarding_screen/splash_screen.dart';
-import 'package:comet/features/onboarding_screen/parent_screen.dart'; 
+import 'package:comet/features/onboarding_screen/parent_screen.dart';
 import 'package:comet/features/login/ui/login_screen.dart';
 import 'package:comet/features/login/login_binding.dart';
 // import 'package:comet/features/home/ui/home_screen.dart';

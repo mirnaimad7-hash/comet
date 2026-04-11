@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:comet/features/onboarding_screen/splash_screen.dart';
 import 'core/theme/app_theme.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const CometApp());
 }
+
 class CometApp extends StatelessWidget {
   const CometApp({super.key});
 
@@ -26,9 +28,8 @@ class CometApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      initialRoute: AppRoutes.splash, 
+      initialRoute: AppRoutes.splash,
       getPages: AppRoutes.routes,
-      
     );
   }
 }

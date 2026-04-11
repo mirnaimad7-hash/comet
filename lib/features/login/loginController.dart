@@ -3,7 +3,7 @@
 import 'package:comet/core/networking/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   final emailController = TextEditingController();
@@ -38,7 +38,7 @@ class LoginController extends GetxController {
         "password": passwordController.text,
       });
 
-      // 3. استخراج التوكن 
+      // 3. استخراج التوكن
       String? token = response.accessToken;
 
       if (token != null) {

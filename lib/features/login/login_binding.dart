@@ -16,6 +16,8 @@ class LoginBinding extends Bindings {
 
     // تجهيز الـ Controller (الذي تحتاجه الصفحة)
     // الآن بما أننا مررنا Get.find<AuthService>()، سيتوقف الخطأ في الكنترولر
-    Get.lazyPut<LoginController>(() => LoginController(Get.find<AuthService>()));
+    Get.lazyPut<LoginController>(
+      () => LoginController(Get.find<AuthService>()),
+    );
   }
 }
