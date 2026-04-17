@@ -1,5 +1,3 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:comet/core/networking/auth_service.dart';

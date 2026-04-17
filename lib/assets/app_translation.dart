@@ -1,4 +1,3 @@
-
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:get/get.dart';
@@ -15,6 +14,6 @@ class AppTranslations extends Translations {
       'hello': 'أهلاً بك',
       'get_started': 'ابدأ الآن',
       'login_msg': 'لديك حساب بالفعل؟ تسجيل الدخول',
-    }
+    },
   };
 }

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'auth_service.g.dart'; 
+part 'auth_service.g.dart';
 
 @RestApi(baseUrl: "https://api.comet-app.com/")
 abstract class AuthService {

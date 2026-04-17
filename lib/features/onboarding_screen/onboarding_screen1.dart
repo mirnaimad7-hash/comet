@@ -1,4 +1,3 @@
-
 // ignore_for_file: use_super_parameters, deprecated_member_use
 
 import 'package:comet/core/theme/app_colors.dart';
@@ -13,27 +12,14 @@ class OnboardingPage1Content extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 60),
-       
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.flare, color:  AppColors.vibrantStart, size: 24),
-                  const SizedBox(width: 8),
-                  const Text(
-                    'Comet',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      fontFamily: 'Plus Jakarta Sans',
-                      color:  AppColors.vibrantStart,
-                    ),
-                  ),
-                ],
-              ),
+              Image.asset('assets/logo.png', height: 50, fit: BoxFit.contain),
+
               GestureDetector(
                 onTap: () {
                   print("حالة الكنترولر هي: $controller");
@@ -60,18 +46,17 @@ class OnboardingPage1Content extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 40),
-        
+
         Expanded(
           child: Stack(
             alignment: Alignment.center,
             children: [
-              
               Container(
                 width: 300,
                 height: 300,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:  AppColors.vibrantStart.withOpacity(0.1),
+                  color: AppColors.vibrantStart.withOpacity(0.1),
                 ),
               ),
               Container(
@@ -81,7 +66,7 @@ class OnboardingPage1Content extends StatelessWidget {
                   borderRadius: BorderRadius.circular(48),
                   boxShadow: [
                     BoxShadow(
-                      color:  AppColors.vibrantStart.withOpacity(0.12),
+                      color: AppColors.vibrantStart.withOpacity(0.12),
                       blurRadius: 64,
                       offset: const Offset(0, 32),
                     ),
@@ -92,7 +77,7 @@ class OnboardingPage1Content extends StatelessWidget {
                   child: Image.asset('assets/earth.jpg', fit: BoxFit.cover),
                 ),
               ),
-              
+
               Positioned(
                 bottom: 40,
                 left: 40,
@@ -110,7 +95,7 @@ class OnboardingPage1Content extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         decoration: const BoxDecoration(
                           gradient: LinearGradient(
-                            colors: [ AppColors.vibrantStart,  AppColors.purple],
+                            colors: [AppColors.vibrantStart, AppColors.purple],
                           ),
                           shape: BoxShape.circle,
                         ),
@@ -151,15 +136,14 @@ class OnboardingPage1Content extends StatelessWidget {
             ],
           ),
         ),
-       
+
         const SizedBox(height: 10),
 
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.start, 
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 RichText(
@@ -175,7 +159,7 @@ class OnboardingPage1Content extends StatelessWidget {
                       TextSpan(text: 'Connect with\nthe '),
                       TextSpan(
                         text: 'Universe.',
-                        style: TextStyle(color:  AppColors.purple),
+                        style: TextStyle(color: AppColors.purple),
                       ),
                     ],
                   ),
@@ -187,7 +171,7 @@ class OnboardingPage1Content extends StatelessWidget {
                   'Discover a world of possibilities and connect with friends across the globe.',
                   style: TextStyle(
                     fontSize: 15,
-                    color:  AppColors.textGrey,
+                    color: AppColors.textGrey,
                     height: 1.4,
                     fontFamily: 'Inter',
                   ),

@@ -9,6 +9,7 @@ import 'package:comet/core/theme/app_colors.dart';
 import 'onboarding_screen2.dart';
 // ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
+
 class OnboardingParentScreen extends StatefulWidget {
   const OnboardingParentScreen({Key? key}) : super(key: key);
 
@@ -28,7 +29,7 @@ class _OnboardingParentScreenState extends State<OnboardingParentScreen> {
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor:AppColors.vibrantEnd,
+        systemNavigationBarColor: AppColors.vibrantEnd,
         systemNavigationBarIconBrightness: Brightness.light,
       ),
     );
@@ -95,7 +96,7 @@ class _OnboardingParentScreenState extends State<OnboardingParentScreen> {
             style: TextStyle(
               fontSize: 100,
               fontWeight: FontWeight.w900,
-              color:  AppColors.purple.withOpacity(0.12),
+              color: AppColors.purple.withOpacity(0.12),
               letterSpacing: -6,
               fontFamily: 'Plus Jakarta Sans',
             ),
@@ -136,8 +137,8 @@ class _OnboardingParentScreenState extends State<OnboardingParentScreen> {
                   borderRadius: BorderRadius.circular(32),
                   gradient: LinearGradient(
                     colors: _currentPage == 2
-                        ? [AppColors.vibrantEnd, const Color(0xFF00677E)]
-                        : [AppColors.vibrantStart,  AppColors.purple],
+                        ? [AppColors.vibrantEnd, AppColors.darkgreen]
+                        : [AppColors.vibrantStart, AppColors.purple],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
@@ -207,7 +208,7 @@ class _OnboardingParentScreenState extends State<OnboardingParentScreen> {
       decoration: BoxDecoration(
         color: isActive
             ? AppColors.vibrantEnd
-            :  AppColors.purple.withOpacity(0.3),
+            : AppColors.purple.withOpacity(0.3),
         borderRadius: BorderRadius.circular(5),
       ),
     );
@@ -246,9 +247,7 @@ class OnboardingPageContent extends StatelessWidget {
               width: 280,
               height: 120,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color:  AppColors.purple.withOpacity(0.2),
-                ),
+                border: Border.all(color: AppColors.purple.withOpacity(0.2)),
                 borderRadius: BorderRadius.circular(150),
               ),
             ),
@@ -260,9 +259,7 @@ class OnboardingPageContent extends StatelessWidget {
               width: 310,
               height: 310,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color:  AppColors.purple.withOpacity(0.1),
-                ),
+                border: Border.all(color: AppColors.purple.withOpacity(0.1)),
                 shape: BoxShape.circle,
               ),
             ),
@@ -311,7 +308,7 @@ class OnboardingPageContent extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.cloudy_snowing,
-                color: Color(0xFF00677E),
+                color: AppColors.darkgreen,
                 size: 32,
               ),
             ),

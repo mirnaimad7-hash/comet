@@ -12,21 +12,18 @@ class OnboardingPage2Content extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 60),
-        
+
         _buildHeader(),
         const SizedBox(height: 20),
-        
+
         Expanded(
           child: Stack(
             alignment: Alignment.center,
             children: [
-              
               Positioned(
                 top: -10,
                 left: -10,
-                child: _buildBlurCircle(
-                  AppColors.vibrantEnd.withOpacity(0.2),
-                ),
+                child: _buildBlurCircle(AppColors.vibrantEnd.withOpacity(0.2)),
               ),
               Positioned(
                 bottom: -10,
@@ -61,7 +58,7 @@ class OnboardingPage2Content extends StatelessWidget {
                   const Icon(Icons.auto_awesome, color: AppColors.vibrantStart),
                 ),
               ),
-              
+
               Positioned(
                 bottom: 80,
                 left: 20,
@@ -110,7 +107,7 @@ class OnboardingPage2Content extends StatelessWidget {
             ],
           ),
         ),
-        
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Column(
@@ -129,7 +126,7 @@ class OnboardingPage2Content extends StatelessWidget {
                     TextSpan(text: 'Create Your \n'),
                     TextSpan(
                       text: 'Legacy.',
-                      style: TextStyle(color:AppColors.vibrantStart),
+                      style: TextStyle(color: AppColors.vibrantStart),
                     ),
                   ],
                 ),
@@ -139,7 +136,7 @@ class OnboardingPage2Content extends StatelessWidget {
                 'Share your stories, post updates, and express yourself with advanced smart features.',
                 style: TextStyle(
                   fontSize: 16,
-                  color:AppColors.textGrey,
+                  color: AppColors.textGrey,
                   height: 1.5,
                 ),
               ),
@@ -165,21 +162,11 @@ class OnboardingPage2Content extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              const Icon(Icons.flare, color: AppColors.vibrantStart),
-              const SizedBox(width: 8),
-              const Text(
-                'Comet',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          Image.asset('assets/logo.png', height: 50, fit: BoxFit.contain),
+
           GestureDetector(
             onTap: () {
-              print(
-                "Skip Pressed",
-              ); 
+              print("Skip Pressed");
               controller?.animateToPage(
                 2,
                 duration: const Duration(milliseconds: 600),
@@ -187,17 +174,13 @@ class OnboardingPage2Content extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: const EdgeInsets.all(
-                20.0,
-              ),
+              padding: const EdgeInsets.all(20.0),
               child: Text(
                 'SKIP',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black.withOpacity(
-                    0.6,
-                  ),
+                  color: Colors.black.withOpacity(0.6),
                   letterSpacing: 1.2,
                 ),
               ),
@@ -241,7 +224,7 @@ class OnboardingPage2Content extends StatelessWidget {
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.2,
-                color: Color(0xFF494453),
+                color: AppColors.darkblue,
               ),
             ),
           ],
@@ -258,9 +241,9 @@ class OnboardingPage2Content extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3), 
-            blurRadius: 100, 
-            spreadRadius: 20, 
+            color: color.withOpacity(0.3),
+            blurRadius: 100,
+            spreadRadius: 20,
           ),
         ],
       ),

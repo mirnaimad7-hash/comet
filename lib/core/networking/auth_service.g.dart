@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element_parameter, no_leading_underscores_for_local_identifiers
+
 part of 'auth_service.dart';
 
 class _AuthService implements AuthService {

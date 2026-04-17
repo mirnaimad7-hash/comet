@@ -61,10 +61,11 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # تأكد من وجود مسافتين فقط قبل كلمة assets
+  
   assets:
     - assets/man.jpg
     - assets/earth.jpg
+    - assets/logo.png
 
   fonts:
     - family: Plus Jakarta Sans
@@ -73,7 +74,6 @@ flutter:
         - asset: assets/fonts/PlusJakartaSans-Bold.ttf
           weight: 700
 
-# إعدادات الشاشة الترحيبية (خارج بلوك الـ flutter)
 flutter_native_splash:
   color: "#ffffff"
   image: "assets/earth.jpg" 

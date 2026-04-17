@@ -4,7 +4,6 @@ import 'package:comet/core/routing/app_router.dart';
 import 'package:comet/features/login/ui/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// ignore: depend_on_referenced_packages
 import 'package:get/get.dart';
 import 'package:comet/core/theme/app_colors.dart';
 import 'onboarding_screen1.dart';
@@ -136,7 +135,7 @@ class OnboardingParentScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(32),
                         gradient: LinearGradient(
                           colors: controller.currentPage.value == 2
-                              ? [AppColors.vibrantEnd, const Color(0xFF00677E)]
+                              ? [AppColors.vibrantEnd, AppColors.darkgreen]
                               : [AppColors.primaryColor, AppColors.purple],
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -189,7 +188,7 @@ class OnboardingParentScreen extends StatelessWidget {
                     fontSize: 12,
                     fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w600,
-                    color: const Color(0xFF0B1C30).withOpacity(0.45),
+                    color: AppColors.onSurfaceColor.withOpacity(0.45),
                     letterSpacing: 1.5,
                   ),
                 ),

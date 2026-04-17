@@ -11,50 +11,75 @@ class LoginController extends GetxController {
 
   final AuthService _authService;
   LoginController(this._authService);
+
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
+
+  var emailError = "".obs;
+  var passwordError = "".obs;
+
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
-  void login() async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      Get.snackbar(
-        "خطأ",
-        "يرجى ملء جميع الحقول",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.red.withOpacity(0.7),
-        colorText: Colors.white,
-      );
-      return;
+  bool _isValid() {
+    emailError.value = "";
+    passwordError.value = "";
+    bool valid = true;
+
+    if (emailController.text.trim().isEmpty) {
+      emailError.value = "يرجى إدخال البريد الإلكتروني";
+      valid = false;
+    } else if (!GetUtils.isEmail(emailController.text.trim())) {
+      emailError.value = "صيغة البريد الإلكتروني غير صحيحة";
+      valid = false;
     }
+
+    if (passwordController.text.isEmpty) {
+      passwordError.value = "يرجى إدخال كلمة المرور";
+      valid = false;
+    }
+
+    if (!valid) {
+      _showErrorSnackbar("تنبيه", "يرجى التأكد من الحقول الحمراء");
+    }
+
+    return valid;
+  }
+
+  void _showErrorSnackbar(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.redAccent.withOpacity(0.1),
+      colorText: Colors.red[900],
+      margin: const EdgeInsets.all(15),
+      borderRadius: 15,
+      duration: const Duration(seconds: 3),
+    );
+  }
+
+  void login() async {
+    if (!_isValid()) return;
 
     try {
       isLoading.value = true;
       final response = await _authService.login({
-        "email": emailController.text,
+        "email": emailController.text.trim(),
         "password": passwordController.text,
       });
 
-      // 3. استخراج التوكن
       String? token = response.accessToken;
 
       if (token != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
 
-        print("Token saved successfully via SharedPreferences");
         Get.offAllNamed('/home');
       }
     } catch (e) {
-      print("Login Error: $e");
-      Get.snackbar(
-        "فشل تسجيل الدخول",
-        "تأكد من البيانات أو الاتصال بالإنترنت",
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.orange.withOpacity(0.7),
-        colorText: Colors.white,
-      );
+      _showErrorSnackbar("فشل الدخول", "تأكد من البيانات أو الاتصال بالإنترنت");
     } finally {
       isLoading.value = false;
     }
