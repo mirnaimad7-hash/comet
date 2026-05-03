@@ -1,9 +1,11 @@
+import 'package:comet/data/auth_repository.dart';
+import 'package:comet/features/login/loginController.dart';
+import 'package:comet/features/login/sinUpController.dart';
 import 'package:comet/features/login/singUp_screen.dart';
 import 'package:get/get.dart';
 import 'package:comet/features/onboarding_screen/splash_screen.dart';
 import 'package:comet/features/onboarding_screen/parent_screen.dart';
 import 'package:comet/features/login/ui/login_screen.dart';
-import 'package:comet/features/login/login_binding.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -16,12 +18,20 @@ class AppRoutes {
     GetPage(name: onboarding, page: () => const OnboardingParentScreen()),
 
     GetPage(
-      name: login,
+      name: AppRoutes.login,
       page: () => const LoginScreen(),
-      binding: LoginBinding(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => LoginController(Get.find<AuthRepository>()));
+      }),
     ),
-    GetPage(name: signUp, page: () => const SignUpScreen()),
-    // (تفعليها بعد إنشاء ملفها)
+    GetPage(
+      name: AppRoutes.signUp,
+      page: () => const SignUpScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => SignUpController(Get.find<AuthRepository>()));
+      }),
+    ),
+    // تفعليها بعد إنشاء ملفها
     /* GetPage(
       name: home,
       page: () => const HomeScreen(),

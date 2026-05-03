@@ -1,9 +1,16 @@
-// ignore_for_file: file_names
-
+// ignore_for_file: file_names, deprecated_member_use, unnecessary_null_comparison
+import 'package:comet/core/networking/token_service.dart';
+import 'package:comet/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:comet/core/exceptions/app_exceptions.dart'; // سننشئ هذا الملف لاحقاً
 
 class SignUpController extends GetxController {
+  final AuthRepository _authRepository;
+
+  SignUpController(this._authRepository);
+
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -25,38 +32,46 @@ class SignUpController extends GetxController {
     emailError.value = "";
     passwordError.value = "";
     confirmError.value = "";
-
     bool valid = true;
 
     if (nameController.text.trim().isEmpty) {
       nameError.value = "يرجى إدخال الاسم الكامل";
       valid = false;
     }
-
     if (!GetUtils.isEmail(emailController.text.trim())) {
       emailError.value = "صيغة البريد الإلكتروني غير صحيحة";
       valid = false;
     }
-
     if (passwordController.text.length < 8) {
       passwordError.value = "يجب أن تكون كلمة المرور 8 محارف على الأقل";
       valid = false;
     }
-
     if (passwordController.text != confirmPasswordController.text) {
       confirmError.value = "كلمات المرور غير متطابقة";
       valid = false;
     }
-
     return valid;
   }
 
   void signUp() async {
+    print("-------------جاري الارسال ");
     if (!_isValid()) return;
 
     try {
       isLoading.value = true;
-      await Future.delayed(const Duration(seconds: 2));
+      final response = await _authRepository.signUp(
+        nameController.text.trim(),
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      print("السيرفر رد, التوكن هو :${response.accessToken}");
+      if (response.accessToken != null) {
+        await TokenService().saveTokens(
+          response.accessToken,
+          response.refreshToken,
+        );
+        print("تم حفظ التوكن ");
+      }
 
       Get.snackbar(
         "نجاح",
@@ -66,13 +81,21 @@ class SignUpController extends GetxController {
         colorText: Colors.green[800],
       );
 
+      // الانتقال للصفحة الرئيسية بعدا
       // Get.offAllNamed(AppRoutes.home);
     } catch (e) {
+      String errorMessage = "حدث خطأ أثناء التسجيل";
+
+      if (e is AppExceptions) {
+        errorMessage = e.message;
+      }
+
       Get.snackbar(
         "خطأ",
-        "حدث خطأ أثناء التسجيل",
+        errorMessage,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red[900],
       );
     } finally {
       isLoading.value = false;

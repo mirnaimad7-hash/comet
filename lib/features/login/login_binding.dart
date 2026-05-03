@@ -1,16 +1,17 @@
+// ignore_for_file: unused_import, unused_local_variable
+
+import 'package:comet/core/networking/api_client.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
+import 'package:comet/data/auth_repository.dart';
 import 'package:comet/core/networking/auth_service.dart';
 import 'loginController.dart';
 
 class LoginBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<Dio>(() => Dio());
-    Get.lazyPut<AuthService>(() => AuthService(Get.find<Dio>()));
+    final authService = AuthService(ApiClient.dio);
+    Get.lazyPut(() => AuthRepository(authService));
 
-    Get.lazyPut<LoginController>(
-      () => LoginController(Get.find<AuthService>()),
-    );
+    Get.lazyPut(() => LoginController(Get.find<AuthRepository>()));
   }
 }

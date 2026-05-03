@@ -1,20 +1,21 @@
-// ignore_for_file: unused_field, file_names, deprecated_member_use, depend_on_referenced_packages
+// ignore_for_file: file_names, deprecated_member_use, depend_on_referenced_packages, unnecessary_null_comparison
 
-import 'package:comet/core/networking/auth_service.dart';
+import 'package:comet/core/exceptions/app_exceptions.dart';
+import 'package:comet/core/networking/token_service.dart';
+import 'package:comet/data/auth_repository.dart';
+import 'package:comet/data/auth_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
+  final AuthRepository _authRepository;
+  LoginController(this._authRepository);
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final AuthService _authService;
-  LoginController(this._authService);
-
   var isPasswordVisible = false.obs;
   var isLoading = false.obs;
-
   var emailError = "".obs;
   var passwordError = "".obs;
 
@@ -63,23 +64,21 @@ class LoginController extends GetxController {
   void login() async {
     if (!_isValid()) return;
 
+    isLoading.value = true;
     try {
-      isLoading.value = true;
-      final response = await _authService.login({
-        "email": emailController.text.trim(),
-        "password": passwordController.text,
-      });
+      AuthResponse data = await _authRepository.login(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
 
-      String? token = response.accessToken;
-
-      if (token != null) {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
-
+      if (data.accessToken != null) {
+        await TokenService().saveTokens(data.accessToken, data.refreshToken);
         Get.offAllNamed('/home');
       }
+    } on AppExceptions catch (e) {
+      _showErrorSnackbar("فشل الدخول", e.message);
     } catch (e) {
-      _showErrorSnackbar("فشل الدخول", "تأكد من البيانات أو الاتصال بالإنترنت");
+      _showErrorSnackbar("خطأ", "حدث خطأ غير متوقع");
     } finally {
       isLoading.value = false;
     }

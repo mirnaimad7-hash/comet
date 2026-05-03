@@ -2,18 +2,16 @@
 
 import 'package:comet/core/routing/app_router.dart';
 import 'package:comet/features/login/singUp_screen.dart';
+import 'package:comet/features/login/ui/forgot_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:comet/core/theme/app_colors.dart';
 import 'package:comet/features/login/loginController.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends GetView<LoginController> {
   const LoginScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
-    final LoginController controller = Get.find<LoginController>();
-
     return Scaffold(
       backgroundColor: AppColors.surfaceColor,
       body: Stack(
@@ -69,6 +67,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 30),
+
                   Obx(
                     () => _buildTextField(
                       hint: 'Email or Phone',
@@ -90,10 +89,13 @@ class LoginScreen extends StatelessWidget {
                           : Icons.visibility_off,
                     ),
                   ),
+
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => ForgotPasswordScreen());
+                      },
                       child: const Text(
                         'Forgot Password?',
                         style: TextStyle(
@@ -108,9 +110,10 @@ class LoginScreen extends StatelessWidget {
                     () => _buildGradientButton(
                       text: 'Log In',
                       isLoading: controller.isLoading.value,
-                      onTap: controller.login,
+                      onTap: () => controller.login(),
                     ),
                   ),
+
                   const SizedBox(height: 30),
                   _buildSeparator(),
                   const SizedBox(height: 30),
@@ -181,7 +184,6 @@ class LoginScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.babyblue,
             borderRadius: BorderRadius.circular(28),
-
             border: hasError ? Border.all(color: Colors.red, width: 1.5) : null,
           ),
           child: TextField(
@@ -206,7 +208,6 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         ),
-
         if (hasError)
           Padding(
             padding: const EdgeInsets.only(left: 15, top: 5),
