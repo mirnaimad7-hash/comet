@@ -3,7 +3,6 @@ import 'package:comet/core/networking/token_service.dart';
 import 'package:comet/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:comet/core/exceptions/app_exceptions.dart'; // سننشئ هذا الملف لاحقاً
 
 class SignUpController extends GetxController {

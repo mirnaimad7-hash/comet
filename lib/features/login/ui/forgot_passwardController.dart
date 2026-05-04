@@ -1,54 +1,71 @@
+// ignore_for_file: file_names
+
+import 'package:comet/data/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ForgotPasswordController extends GetxController {
+  final AuthRepository _repo = Get.find<AuthRepository>();
+
   final emailController = TextEditingController();
   final otpController = TextEditingController();
   final newPasswordController = TextEditingController();
 
   var isLoading = false.obs;
-  var currentStep = 0.obs; // 0: إرسال إيميل, 1: كود التحقق, 2: كلمة سر جديدة
+  var currentStep = 0.obs;
 
-  // 1. إرسال طلب رمز التحقق
   void sendOtp() async {
     if (!GetUtils.isEmail(emailController.text.trim())) {
-      Get.snackbar(
-        "خطأ",
-        "يرجى إدخال إيميل صحيح",
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar("خطأ", "يرجى إدخال إيميل صحيح");
       return;
     }
 
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2)); // محاكاة API
-    isLoading.value = false;
-    currentStep.value = 1; // الانتقال لصفحة الكود
+    try {
+      await _repo.forgotPassword(emailController.text.trim());
+      currentStep.value = 1;
+    } catch (e) {
+      Get.snackbar("خطأ", "فشل الاتصال بالسيرفر: ${e.toString()}");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  // 2. التحقق من الكود (OTP)
   void verifyOtp() async {
     if (otpController.text.length < 4) return;
 
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    isLoading.value = false;
-    currentStep.value = 2; // الانتقال لصفحة تغيير كلمة السر
+    try {
+      await _repo.verifyOtp(
+        emailController.text.trim(),
+        otpController.text.trim(),
+      );
+      currentStep.value = 2;
+    } catch (e) {
+      Get.snackbar("خطأ", "الكود غير صحيح");
+    } finally {
+      isLoading.value = false;
+    }
   }
 
-  // 3. تعيين كلمة السر الجديدة
   void resetPassword() async {
-    if (newPasswordController.text.length < 8) return;
+    if (newPasswordController.text.length < 8) {
+      Get.snackbar("خطأ", "كلمة المرور يجب أن تكون 8 خانات على الأقل");
+      return;
+    }
 
     isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    isLoading.value = false;
-
-    Get.offAllNamed('/login'); // العودة للوجن بعد النجاح
-    Get.snackbar(
-      "نجاح",
-      "تم تغيير كلمة المرور بنجاح",
-      snackPosition: SnackPosition.TOP,
-    );
+    try {
+      await _repo.resetPassword(
+        emailController.text.trim(),
+        newPasswordController.text.trim(),
+      );
+      Get.offAllNamed('/login');
+      Get.snackbar("نجاح", "تم تغيير كلمة المرور بنجاح");
+    } catch (e) {
+      Get.snackbar("خطأ", "حدث خطأ أثناء تغيير كلمة المرور");
+    } finally {
+      isLoading.value = false;
+    }
   }
 }

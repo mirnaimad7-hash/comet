@@ -1,8 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages, duplicate_import, unused_import
 
 import 'package:comet/assets/app_translation.dart';
+import 'package:comet/core/api/api_consumer.dart';
+import 'package:comet/core/api/dio_consumer.dart';
 import 'package:comet/core/networking/api_client.dart';
-import 'package:comet/core/networking/auth_service.dart';
 import 'package:comet/core/routing/app_router.dart';
 import 'package:comet/data/auth_repository.dart';
 import 'package:comet/features/login/login_binding.dart';
@@ -17,10 +18,12 @@ import 'core/theme/app_theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ignore: unused_local_variable
-  final authService = AuthService(ApiClient.dio);
-  await Get.putAsync<AuthService>(() async => AuthService(ApiClient.dio));
-  Get.put(AuthRepository(Get.find<AuthService>()));
+  final DioConsumer apiConsumer = DioConsumer(ApiClient.dio);
+
+  Get.put<ApiConsumer>(apiConsumer);
+
+  Get.put(AuthRepository(apiConsumer));
+
   runApp(const CometApp());
 }
 
