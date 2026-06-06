@@ -2,6 +2,7 @@ import 'package:comet/data/auth_repository.dart';
 import 'package:comet/features/login/loginController.dart';
 import 'package:comet/features/login/sinUpController.dart';
 import 'package:comet/features/login/singUp_screen.dart';
+import 'package:comet/home/home.dart';
 import 'package:get/get.dart';
 import 'package:comet/features/onboarding_screen/splash_screen.dart';
 import 'package:comet/features/onboarding_screen/parent_screen.dart';
@@ -31,10 +32,7 @@ class AppRoutes {
         Get.lazyPut(() => SignUpController(Get.find<AuthRepository>()));
       }),
     ),
-    // تفعليها بعد إنشاء ملفها
-    /* GetPage(
-      name: home,
-      page: () => const HomeScreen(),
-    ), */
+
+    GetPage(name: home, page: () => Home()),
   ];
 }

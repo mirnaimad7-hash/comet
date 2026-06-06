@@ -34,7 +34,10 @@ dependencies:
   dio: ^5.9.2
   retrofit: ^4.9.2
   pretty_dio_logger: ^1.3.1
-
+  
+  google_fonts: ^8.0.2
+  image_picker: ^1.2.1
+  video_player: ^2.8.2
   # اللغات 
   intl: ^0.20.2
   
@@ -46,7 +49,7 @@ dependencies:
   flutter_svg: ^2.2.4
   flutter_screenutil: ^5.9.3
   shared_preferences: ^2.2.2
-  image_picker: ^1.2.1
+  
   pinput: ^6.0.2
 
 dev_dependencies:
