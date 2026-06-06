@@ -11,19 +11,25 @@ class AuthRepository {
   final ApiConsumer apiConsumer;
 
   AuthRepository(this.apiConsumer);
+Future<AuthResponse> login(String email, String password) async {
+  try {
+    final response = await apiConsumer.post(
+      ApiEndpoints.signin,
+      data: {'email': email, 'password': password},
+    );
+    
+    print("--- RAW RESPONSE FROM BACKEND: $response");
 
-  Future<AuthResponse> login(String email, String password) async {
-    try {
-      final response = await apiConsumer.post(
-        ApiEndpoints.signin,
-        data: {'email': email, 'password': password},
-      );
-      return AuthResponse.fromJson(response);
-    } on DioException catch (e) {
-      throw Exception(ErrorHandler.getErrorMessage(e));
-    }
+    return AuthResponse.fromJson(response);
+  } on DioException catch (e) {
+    throw Exception(ErrorHandler.getErrorMessage(e));
+  } catch (e, stacktrace) {
+   
+    print("--- CRITICAL PARSING ERROR: $e");
+    print("--- STACKTRACE: $stacktrace");
+    throw Exception("Parsing error occurred");
   }
-
+}
   Future<AuthResponse> signUp(
     String name,
     String email,

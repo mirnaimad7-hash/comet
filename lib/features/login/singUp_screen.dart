@@ -74,8 +74,8 @@ class SignUpScreen extends GetView<SignUpController> {
                       suffixIcon: IconButton(
                         icon: Icon(
                           controller.isPasswordObscured.value
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: Colors.grey,
                           size: 20.sp,
                         ),
