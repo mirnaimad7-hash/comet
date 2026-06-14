@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'dart:io';
-import '../logic/post_model.dart';
+import '../models/post_model.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../profile/profile_controller.dart';

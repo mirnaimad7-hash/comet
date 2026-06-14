@@ -20,7 +20,6 @@ class DioConsumer implements ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-      // هنا يمكنكِ وضع معالجة أخطاء متقدمة كما في الفيديو
       throw Exception(e.message);
     }
   }

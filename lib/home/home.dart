@@ -1,13 +1,14 @@
 import 'dart:io';
+import 'package:comet/chats/chatsAndGroups_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../features/posts/ui/post_controller.dart';
-import '../custom_app_bar.dart';
+import 'custom_app_bar.dart';
 import '../stories/stories_section.dart';
 import 'feed_section.dart';
 import 'bottom_nav.dart';
 import '../features/posts/ui/create_post_page.dart';
-import '../search_page.dart';
+import '../search_page/search_page.dart';
 import '../features/profile/profile_page.dart';
 
 class Home extends StatelessWidget {
@@ -34,7 +35,7 @@ class Home extends StatelessWidget {
       case 2:
         return const SizedBox();
       case 3:
-        return const Center(child: Text("Chat Page"));
+        return const ChatsAndGroupsPage();
       case 4:
         return const ProfilePage();
       default:

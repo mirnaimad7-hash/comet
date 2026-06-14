@@ -9,7 +9,7 @@ class ApiClient {
   static Dio _initDio() {
     final Dio dioInstance = Dio(
       BaseOptions(
-        baseUrl: "http://localhost:8000",
+        baseUrl: "http://10.2.0.2:8000",
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
       ),

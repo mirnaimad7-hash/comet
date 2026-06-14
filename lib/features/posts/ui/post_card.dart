@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../logic/post_model.dart';
+import '../models/post_model.dart';
 import 'post_controller.dart';
 import '../../profile/profile_controller.dart';
 import 'post_details_page.dart';

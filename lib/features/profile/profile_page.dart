@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import
+// ignore_for_file: unused_import, unused_field
 
 import 'package:comet/features/profile/edit_profile_page.dart';
 import 'package:comet/home/home.dart';

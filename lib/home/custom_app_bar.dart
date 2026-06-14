@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'search_page.dart';
+import '../search_page/search_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -40,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 MaterialPageRoute(builder: (context) => const SearchPage()),
               );
             },
-            icon: const Icon(Icons.search, color: Colors.black87, size: 28),
+            icon: const Icon(Icons.more_vert, color: Colors.black87, size: 28),
           ),
         ),
         const SizedBox(width: 10),
