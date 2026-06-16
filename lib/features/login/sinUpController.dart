@@ -59,9 +59,9 @@ class SignUpController extends GetxController {
     try {
       isLoading.value = true;
       final response = await _authRepository.signUp(
-        nameController.text.trim(),
-        emailController.text.trim(),
-        passwordController.text.trim(),
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
       );
       print("السيرفر رد, التوكن هو :${response.accessToken}");
       if (response.accessToken != null) {
@@ -80,8 +80,7 @@ class SignUpController extends GetxController {
         colorText: Colors.green[800],
       );
 
-      // الانتقال للصفحة الرئيسية بعدا
-      // Get.offAllNamed(AppRoutes.home);
+      Get.offAllNamed('/home');
     } catch (e) {
       String errorMessage = "حدث خطأ أثناء التسجيل";
 

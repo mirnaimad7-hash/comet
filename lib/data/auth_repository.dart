@@ -6,43 +6,50 @@ import 'package:comet/core/networking/api_endpoints.dart';
 import 'package:comet/data/auth_response_model.dart';
 import 'package:comet/features/login/ui/forgot_passwardController.dart';
 import 'package:dio/dio.dart';
+import 'package:comet/core/exceptions/app_exceptions.dart';
 
 class AuthRepository {
   final ApiConsumer apiConsumer;
 
   AuthRepository(this.apiConsumer);
-Future<AuthResponse> login(String email, String password) async {
-  try {
-    final response = await apiConsumer.post(
-      ApiEndpoints.signin,
-      data: {'email': email, 'password': password},
-    );
-    
-    print("--- RAW RESPONSE FROM BACKEND: $response");
 
-    return AuthResponse.fromJson(response);
-  } on DioException catch (e) {
-    throw Exception(ErrorHandler.getErrorMessage(e));
-  } catch (e, stacktrace) {
-   
-    print("--- CRITICAL PARSING ERROR: $e");
-    print("--- STACKTRACE: $stacktrace");
-    throw Exception("Parsing error occurred");
-  }
-}
-  Future<AuthResponse> signUp(
-    String name,
-    String email,
-    String password,
-  ) async {
+  Future<AuthResponse> login(String email, String password) async {
     try {
       final response = await apiConsumer.post(
-        ApiEndpoints.signup,
-        data: {"name": name, "email": email, "password": password},
+        ApiEndpoints.signin,
+        data: {'email': email, 'password': password},
       );
+
+      print("--- RAW LOGIN RESPONSE FROM BACKEND: $response");
       return AuthResponse.fromJson(response);
     } on DioException catch (e) {
       throw Exception(ErrorHandler.getErrorMessage(e));
+    } catch (e, stacktrace) {
+      print("--- CRITICAL LOGIN PARSING ERROR: $e");
+      print("--- STACKTRACE: $stacktrace");
+      throw Exception("حدث خطأ أثناء معالجة بيانات تسجيل الدخول");
+    }
+  }
+
+  Future<AuthResponse> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        ApiEndpoints.signup,
+        data: {'name': name, 'email': email, 'password': password},
+      );
+
+      print("--- RAW SIGNUP RESPONSE FROM BACKEND: $response");
+      return AuthResponse.fromJson(response);
+    } on DioException catch (e) {
+      throw Exception(ErrorHandler.getErrorMessage(e));
+    } catch (e, stacktrace) {
+      print("--- CRITICAL SIGNUP PARSING ERROR: $e");
+      print("--- STACKTRACE: $stacktrace");
+      throw Exception("حدث خطأ أثناء معالجة بيانات الحساب الجديد");
     }
   }
 
@@ -52,6 +59,8 @@ Future<AuthResponse> login(String email, String password) async {
         ApiEndpoints.forgotPassword,
         data: {"email": email},
       );
+    } on AppExceptions catch (e) {
+      throw Exception(e.message);
     } on DioException catch (e) {
       throw Exception(ErrorHandler.getErrorMessage(e));
     }
@@ -63,6 +72,8 @@ Future<AuthResponse> login(String email, String password) async {
         ApiEndpoints.verifyOtp,
         data: {"email": email, "otp": otp},
       );
+    } on AppExceptions catch (e) {
+      throw Exception(e.message);
     } on DioException catch (e) {
       throw Exception(ErrorHandler.getErrorMessage(e));
     }
@@ -74,6 +85,8 @@ Future<AuthResponse> login(String email, String password) async {
         ApiEndpoints.resetPassword,
         data: {"email": email, "newPassword": password},
       );
+    } on AppExceptions catch (e) {
+      throw Exception(e.message);
     } on DioException catch (e) {
       throw Exception(ErrorHandler.getErrorMessage(e));
     }

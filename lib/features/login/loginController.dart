@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, deprecated_member_use, depend_on_referenced_packages, unnecessary_null_comparison
 
-import 'package:comet/core/exceptions/app_exceptions.dart';
 import 'package:comet/core/networking/token_service.dart';
 import 'package:comet/data/auth_repository.dart';
 import 'package:comet/data/auth_response_model.dart';
@@ -57,13 +56,11 @@ class LoginController extends GetxController {
       colorText: Colors.red[900],
       margin: const EdgeInsets.all(15),
       borderRadius: 15,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 4),
     );
   }
 
   void login() async {
-    if (!_isValid()) return;
-
     isLoading.value = true;
     try {
       AuthResponse data = await _authRepository.login(
@@ -71,14 +68,21 @@ class LoginController extends GetxController {
         passwordController.text.trim(),
       );
 
-      if (data.accessToken != null) {
+      print("--- تم تسجيل الدخول بنجاح والتوكن هو: ${data.accessToken}");
+
+      if (data.accessToken.isNotEmpty) {
         await TokenService().saveTokens(data.accessToken, data.refreshToken);
         Get.offAllNamed('/home');
       }
-    } on AppExceptions catch (e) {
-      _showErrorSnackbar("فشل الدخول", e.message);
     } catch (e) {
-      _showErrorSnackbar("خطأ", "حدث خطأ غير متوقع");
+      String errorMessage = e.toString().replaceAll("Exception: ", "");
+      Get.snackbar(
+        "فشل تسجيل الدخول",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red[900],
+      );
     } finally {
       isLoading.value = false;
     }

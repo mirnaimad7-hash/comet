@@ -18,8 +18,18 @@ class AuthResponse {
       id: json['id']?.toString() ?? '',
       name: json['name'] ?? '',
       role: json['role'] ?? '',
-      accessToken: json['accessToken'] ?? '',
-      refreshToken: json['refreshToken'] ?? '',
+      accessToken: json['accessToken'] ?? json['access_token'] ?? '',
+      refreshToken: json['refreshToken'] ?? json['refresh_token'] ?? '',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'role': role,
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+    };
   }
 }

@@ -20,7 +20,7 @@ class DioConsumer implements ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-      throw Exception(e.message);
+      _handleDioException(e);
     }
   }
 
@@ -31,6 +31,7 @@ class DioConsumer implements ApiConsumer {
     Map<String, dynamic>? queryParameters,
   }) async {
     try {
+      _dio.options.contentType = "application/json";
       final response = await _dio.post(
         path,
         data: data,
@@ -38,7 +39,7 @@ class DioConsumer implements ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-      throw Exception(e.message);
+      _handleDioException(e);
     }
   }
 
@@ -56,7 +57,7 @@ class DioConsumer implements ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-      throw Exception(e.message);
+      _handleDioException(e);
     }
   }
 
@@ -74,7 +75,25 @@ class DioConsumer implements ApiConsumer {
       );
       return response.data;
     } on DioException catch (e) {
-      throw Exception(e.message);
+      _handleDioException(e);
     }
+  }
+
+  void _handleDioException(DioException e) {
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout) {
+      throw Exception(
+        "انتهت مهلة الاتصال، تأكد من تشغيل السيرفر ومن أن جهازك على نفس الشبكة!",
+      );
+    }
+
+    if (e.type == DioExceptionType.connectionError) {
+      throw Exception(
+        "فشل الاتصال بالخادم، تأكد من صحة الـ IP المكتوب والـ Firewall.",
+      );
+    }
+
+    throw Exception("حدث خطأ في الاتصال بالخادم");
   }
 }

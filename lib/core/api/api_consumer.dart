@@ -1,3 +1,7 @@
+// ignore_for_file: unused_import, implementation_imports
+
+import 'package:dio/src/options.dart';
+
 abstract class ApiConsumer {
   Future<dynamic> get(
     String path, {
