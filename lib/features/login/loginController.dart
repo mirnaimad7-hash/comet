@@ -22,6 +22,7 @@ class LoginController extends GetxController {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
+  // ignore: unused_element
   bool _isValid() {
     emailError.value = "";
     passwordError.value = "";
