@@ -160,11 +160,59 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> pickFiles() async {
-    final result = await FilePicker.pickFiles();
+  Future<void> pickVideo(bool fromCamera) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(
+      source: fromCamera ? ImageSource.camera : ImageSource.gallery,
+    );
+    if (video != null) {
+      messages.add(
+        MessageModel(
+          time: _getCurrentTime(),
+          isSender: true,
+          isVideo: true,
+          localVideoPath: video.path,
+        ),
+      );
+      scrollToBottom();
+    }
+  }
 
-    if (result != null) {
-      print("تم اختيار ملف: ${result.files.single.name}");
+  Future<void> pickFiles() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'pdf',
+        'doc',
+        'docx',
+        'xls',
+        'xlsx',
+        'txt',
+        'zip',
+        'rar',
+        'ppt',
+        'pptx',
+      ],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      final file = result.files.single;
+      final sizeInKB = (file.size / 1024).toStringAsFixed(1);
+      final sizeLabel = file.size >= 1024 * 1024
+          ? '${(file.size / (1024 * 1024)).toStringAsFixed(1)} MB'
+          : '$sizeInKB KB';
+
+      messages.add(
+        MessageModel(
+          time: _getCurrentTime(),
+          isSender: true,
+          isFile: true,
+          localFilePath: file.path,
+          fileName: file.name,
+          fileSize: sizeLabel,
+        ),
+      );
+      scrollToBottom();
     }
   }
 

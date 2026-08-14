@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl = "http://10.88.196.39:8000";
+  static const String baseUrl = "http://10.101.81.237:8000";
   // static const String baseUrl = "http://localhost:8000";
 
   static const String signin = "/auth/signin";

@@ -1,10 +1,36 @@
 // ignore_for_file: file_names, deprecated_member_use, unnecessary_underscores
 
+import 'dart:io';
 import 'package:comet/chats/chats_page.dart';
+import 'package:comet/group/create_group_page.dart';
 import 'package:comet/core/theme/app_colors.dart';
+import 'package:comet/group/group_chat_page.dart';
 import 'package:comet/home/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+class ChatsAndGroupsController extends GetxController {
+  var groupsData = <LocalGroupModel>[
+    LocalGroupModel(
+      name: "Digital Artisans",
+      desc: "Exploring the intersection of AI art and traditional canvas.",
+      tag: "Admin",
+      members: "1.2k members",
+    ),
+    LocalGroupModel(
+      name: "Cyberpunk Collective",
+      desc: "Futuristic aesthetics and hardware modification discussions.",
+      tag: "Moderator",
+      members: "856 members",
+    ),
+    LocalGroupModel(
+      name: "The Solstice Path",
+      desc: "Weekly photography challenges and outdoor meetups.",
+      tag: "",
+      members: "3.4k members",
+    ),
+  ].obs;
+}
 
 class ChatsAndGroupsPage extends StatefulWidget {
   const ChatsAndGroupsPage({super.key});
@@ -17,6 +43,10 @@ class _ChatsAndGroupsPageState extends State<ChatsAndGroupsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
+
+  final ChatsAndGroupsController groupsController = Get.put(
+    ChatsAndGroupsController(),
+  );
 
   String _pageSubTitle = "RECENT DIALOGUES";
   String _pageTitle = "Messages";
@@ -142,7 +172,7 @@ class _ChatsAndGroupsPageState extends State<ChatsAndGroupsPage>
 
   Widget _buildCreateGroupButton() {
     return GestureDetector(
-      onTap: () => Get.snackbar("Comet", "Create Group Clicked!"),
+      onTap: () => Get.to(() => CreateGroupPage()),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
         decoration: BoxDecoration(
@@ -307,7 +337,7 @@ class _ChatsAndGroupsPageState extends State<ChatsAndGroupsPage>
               () => ChatPage(
                 userName: chat.name,
                 userAvatar:
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80", // أو نمرر رابط الصورة الخاص به chat.avatar
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80",
                 isOnline: chat.isOnline,
               ),
             );
@@ -509,145 +539,142 @@ class _ChatsAndGroupsPageState extends State<ChatsAndGroupsPage>
     );
   }
 
-  //  قائمة المجموعات
   Widget _buildGroupsList() {
-    final List<LocalGroupModel> groupsData = [
-      LocalGroupModel(
-        name: "Digital Artisans",
-        desc: "Exploring the intersection of AI art and traditional canvas.",
-        tag: "Admin",
-        members: "1.2k members",
-      ),
-      LocalGroupModel(
-        name: "Cyberpunk Collective",
-        desc: "Futuristic aesthetics and hardware modification discussions.",
-        tag: "Moderator",
-        members: "856 members",
-      ),
-      LocalGroupModel(
-        name: "The Solstice Path",
-        desc: "Weekly photography challenges and outdoor meetups.",
-        tag: "",
-        members: "3.4k members",
-      ),
-    ];
+    return Obx(
+      () => ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        itemCount: groupsController.groupsData.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+        itemBuilder: (context, index) {
+          final group = groupsController.groupsData[index];
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      itemCount: groupsData.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        final group = groupsData[index];
-        return Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.secondaryNeon.withOpacity(0.03),
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 54,
-                height: 54,
-                decoration: BoxDecoration(
-                  color: AppColors.babyblue,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.blur_on,
-                    color: AppColors.secondaryNeon,
-                    size: 28,
+          return GestureDetector(
+            onTap: () {
+              Get.to(() => GroupChatPage(group: group));
+            },
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.secondaryNeon.withOpacity(0.03),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
                   ),
-                ),
+                ],
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            group.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.onSurfaceColor,
-                              fontSize: 16,
-                              fontFamily: 'Plus Jakarta Sans',
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (group.tag.isNotEmpty)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.gradientLightPurple.withOpacity(
-                                0.3,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              group.tag,
-                              style: const TextStyle(
-                                color: AppColors.secondaryNeon,
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                      ],
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 54,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      color: AppColors.babyblue,
+                      borderRadius: BorderRadius.circular(16),
+                      image: group.avatar.isNotEmpty
+                          ? DecorationImage(
+                              image: group.avatar.startsWith('http')
+                                  ? NetworkImage(group.avatar) as ImageProvider
+                                  : FileImage(File(group.avatar)),
+                              fit: BoxFit.cover,
+                            )
+                          : null,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      group.desc,
-                      style: const TextStyle(
-                        color: AppColors.darkblue,
-                        fontSize: 13,
-                        height: 1.3,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
+                    child: group.avatar.isEmpty
+                        ? const Center(
+                            child: Icon(
+                              Icons.blur_on,
+                              color: AppColors.secondaryNeon,
+                              size: 28,
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
-                          Icons.group_outlined,
-                          size: 16,
-                          color: AppColors.textGrey,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                group.name,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.onSurfaceColor,
+                                  fontSize: 16,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (group.tag.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.gradientLightPurple
+                                      .withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  group.tag,
+                                  style: const TextStyle(
+                                    color: AppColors.secondaryNeon,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(height: 4),
                         Text(
-                          group.members,
+                          group.desc,
                           style: const TextStyle(
-                            color: AppColors.textGrey,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            color: AppColors.darkblue,
+                            fontSize: 13,
+                            height: 1.3,
                           ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.group_outlined,
+                              size: 16,
+                              color: AppColors.textGrey,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              group.members,
+                              style: const TextStyle(
+                                color: AppColors.textGrey,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        );
-      },
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -681,11 +708,13 @@ class LocalGroupModel {
   final String desc;
   final String tag;
   final String members;
+  final String avatar;
 
   LocalGroupModel({
     required this.name,
     required this.desc,
-    required this.tag,
+    this.tag = "",
     required this.members,
+    this.avatar = "",
   });
 }

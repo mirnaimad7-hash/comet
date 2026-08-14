@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:comet/chats/chats_controller.dart';
 import 'package:comet/chats/widget/image_viewer.dart';
+import 'package:comet/chats/widget/video_player_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/message_model.dart';
@@ -10,9 +11,14 @@ import '../models/message_model.dart';
 class MessageBubble extends StatelessWidget {
   final MessageModel message;
   final VoidCallback onReply;
-  final ChatController controller = Get.find();
+  final ChatController controller;
 
-  MessageBubble({super.key, required this.message, required this.onReply});
+  MessageBubble({
+    super.key,
+    required this.message,
+    required this.onReply,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +98,35 @@ class MessageBubble extends StatelessWidget {
                   child: _buildMessageContent(),
                 ),
 
+                // الوقت + صح القراءة
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 4, right: 4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        message.time,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                      if (message.isSender) ...[
+                        const SizedBox(width: 4),
+                        Obx(
+                          () => Icon(
+                            Icons.done_all,
+                            size: 16,
+                            color: message.isRead.value
+                                ? Colors.blueAccent
+                                : Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+
                 Obx(
                   () => AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
@@ -147,6 +182,11 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
       );
+    } else if (message.isVideo == true && message.localVideoPath != null) {
+      return VideoPlayerBubble(
+        videoPath: message.localVideoPath!,
+        isSender: message.isSender,
+      );
     } else if (message.isImage == true && message.localImagePath != null) {
       return GestureDetector(
         onTap: () =>
@@ -156,11 +196,103 @@ class MessageBubble extends StatelessWidget {
           child: Image.file(File(message.localImagePath!), width: 200),
         ),
       );
+    } else if (message.isFile == true) {
+      return _buildFileBubble();
     } else {
       return Text(
         message.text,
         style: TextStyle(color: message.isSender ? Colors.white : Colors.black),
       );
     }
+  }
+
+  Widget _buildFileBubble() {
+    final name = message.fileName ?? "File";
+    final size = message.fileSize ?? "";
+    final ext = name.contains('.') ? name.split('.').last.toUpperCase() : "FILE";
+
+    // Pick icon color based on extension
+    Color extColor;
+    IconData extIcon;
+    switch (ext.toLowerCase()) {
+      case 'pdf':
+        extColor = Colors.red;
+        extIcon = Icons.picture_as_pdf;
+        break;
+      case 'doc':
+      case 'docx':
+        extColor = Colors.blue;
+        extIcon = Icons.article;
+        break;
+      case 'xls':
+      case 'xlsx':
+        extColor = Colors.green;
+        extIcon = Icons.table_chart;
+        break;
+      case 'ppt':
+      case 'pptx':
+        extColor = Colors.orange;
+        extIcon = Icons.slideshow;
+        break;
+      case 'zip':
+      case 'rar':
+        extColor = Colors.purple;
+        extIcon = Icons.folder_zip;
+        break;
+      default:
+        extColor = Colors.grey;
+        extIcon = Icons.insert_drive_file;
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: message.isSender
+                ? Colors.white.withOpacity(0.25)
+                : extColor.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            extIcon,
+            color: message.isSender ? Colors.white : extColor,
+            size: 24,
+          ),
+        ),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: message.isSender ? Colors.white : Colors.black87,
+                ),
+              ),
+              if (size.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(
+                  '$ext • $size',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: message.isSender
+                        ? Colors.white70
+                        : Colors.grey[600],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
